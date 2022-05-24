@@ -82,16 +82,18 @@ python3.* -m venv env
 
 ## If you need some Gunicorn example config — welcome:
 
+Path of gunicorn_config.py: ~/code/project1/project1
+
 ```
 sudo vim gunicorn_config.py
 ```
 
 ```
-command = '/home/www/code/project/env/bin/gunicorn'
-pythonpath = '/home/www/code/project/project'
+command = '/root/code/project1/env/bin/gunicorn'
+pythonpath = '/root/code/project1/project1'
 bind = '127.0.0.1:8001'
 workers = 3
-user = 'www'
+user = 'root'
 limit_request_fields = 32000
 limit_request_field_size = 0
 raw_env = 'DJANGO_SETTINGS_MODULE=project.settings'
@@ -99,7 +101,15 @@ raw_env = 'DJANGO_SETTINGS_MODULE=project.settings'
 
 ```
 mkdir bin
-sudo vim /bin/start_gunicorn.sh
+sudo vim project1/bin/start_gunicorn.sh
+```
+
+```
+#!/bin/bash
+	source /root/code/project1/env/bin/activate
+	source /root/code/project1/env/bin/postactivate
+	exec gunicorn -c "/root/code/project1/project1/gunicorn_config.py"
+	project1.wsgi
 ```
 
 ## Nginx
@@ -165,7 +175,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-
 RELEASE=$(lsb_release -cs) ; \
 echo "deb http://apt.postgresql.org/pub/repos/apt/ ${RELEASE}"-pgdg main | sudo tee  /etc/apt/sources.list.d/pgdg.list ; \
 sudo apt update ; \
-sudo apt -y install postgresql-11 ; \
+sudo apt -y install postgresql-1* ; \
 
 sudo localedef ru_RU.UTF-8 -i ru_RU -fUTF-8 ; \
 export LANGUAGE=ru_RU.UTF-8 ; \
